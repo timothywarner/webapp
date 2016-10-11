@@ -1,2 +1,2 @@
-# webapp
-IT Edge Intersection 2016 (itedgeintersection.com) : Manage Your Azure Web Apps with Windows PowerShell
+# Manage Your Azure Web Apps with Windows PowerShell
+IT Edge Intersection 2016 (itedgeintersection.com)
