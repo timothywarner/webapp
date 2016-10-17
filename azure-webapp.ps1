@@ -1,6 +1,6 @@
 break
 # #############################################################################
-# Azure CLI
+# Azure Web Apps
 # AUTHOR:  Tim Warner
 # EMAIL: timothy-warner@pluralsight.com
 # TWITTER: @TechTrainerTim
@@ -21,55 +21,26 @@ Set-AzureRmContext -SubscriptionName $defaultSubscription
 
 #endregion
 
-#region Navigating the Azure CLI
+#region Housekeeping
 
-Start-Process https://github.com/Azure/azure-xplat-cli
+$PSVersionTable
 
-azure
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Force -Scope Process
 
-azure help login
+Update-Help -Force -ErrorAction SilentlyContinue
 
-azure login
+Get-Command -Module AzureRM.Websites | Select-Object -Property Name | Format-Wide -Column 2
 
-Start-Process https://aka.ms/devicelogin
+Get-Command -Module Azure | Where-Object { $_.Name -like "*website*"} | Select-Object -Property Name | Format-Wide -Column 2
 
-azure config mode arm
+Get-Help -Name New-AzureRmWebApp -ShowWindow
 
-azure account list
-
-azure account show '150dollar'
-
-azure account set '150dollar'
-
-azure help webapp
-
-azure webapp list 'ITEdgeRG'
-
-azure location list
-
-azure help webapp create
-
-azure webapp create -v -g 'ITEdgeRG' -n 'itedgetest01' -l 'westus' -p 'itedgeSP'
-
-azure webapp list 'ITEdgeRG'
-
-azure webapp show -n 'itedgetest01' -g 'ITEdgeRG'
-
-azure webapp stop/start/restart/delete -n 'itedgetest01' -g 'ITEdgeRG'
-
-# CONFIG
-
-
-# ARM template deployment
-
-Start-Process https://azure.microsoft.com/en-us/documentation/templates/201-web-app-github-deploy/
-
-Start-Process https://github.com/Azure/azure-quickstart-templates/tree/master/201-web-app-github-deploy
-
-azure group deployment create -g 'ITEdgeRG' -n 'itedgeCLIdeploy01' -f .\simplewebapp\azuredeploy.json 
-
+Get-Help -Name New-AzureWebsite -ShowWindow
 
 #endregion
+
+
+
 
 
 

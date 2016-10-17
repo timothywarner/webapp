@@ -57,21 +57,31 @@ azure webapp show -n 'itedgetest01' -g 'ITEdgeRG'
 
 azure webapp stop/start/restart/delete -n 'itedgetest01' -g 'ITEdgeRG'
 
-# CONFIG
+#endregion
 
+#region App Settings
 
-# ARM template deployment
+azure config mode asm
+
+azure
+
+azure help site
+
+azure site list
+
+azure site appsetting list 'itedgetest01'
+
+#endregion
+
+#region ARM template deployment
 
 Start-Process https://azure.microsoft.com/en-us/documentation/templates/201-web-app-github-deploy/
 
 Start-Process https://github.com/Azure/azure-quickstart-templates/tree/master/201-web-app-github-deploy
 
-azure group deployment create -g 'ITEdgeRG' -n 'itedgeCLIdeploy01' -f .\simplewebapp\azuredeploy.json 
-
+azure group deployment create --template-uri https://github.com/timothywarner/webapp/simplewebapp/azuredeploy.json -g 'ITEdgeRG' -n 'itedgeCLIdeploy01' 
 
 #endregion
-
-
 
 
 
