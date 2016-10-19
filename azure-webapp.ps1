@@ -45,35 +45,35 @@ Get-Help -Name New-AzureWebsite -ShowWindow
 
 #region App Service Plans
 
-New-AzureRmAppServicePlan -Name ContosoAppServicePlan -Location "South Central US" -ResourceGroupName ContosoAzureResourceGroup -Tier Premium -WorkerSize Large -NumberofWorkers 10
+New-AzureRmAppServicePlan -Name itedgeserviceplan2 -Location "South Central US" -ResourceGroupName $defaultResourceGroup -Tier Premium -WorkerSize Large -NumberofWorkers 10
 
-New-AzureRmAppServicePlan -Name ContosoAppServicePlan -Location "South Central US" -ResourceGroupName ContosoAzureResourceGroup -AseName constosoASE -AseResourceGroupName contosoASERG -Tier Premium -WorkerSize Large -NumberofWorkers 10
+New-AzureRmAppServicePlan -Name itedgeserviceplan2 -Location "South Central US" -ResourceGroupName $defaultResourceGroup -AseName constosoASE -AseResourceGroupName contosoASERG -Tier Premium -WorkerSize Large -NumberofWorkers 10
 
-Get-AzureRmAppServicePlan -ResourceGroupname ContosoAzureResourceGroup
+Get-AzureRmAppServicePlan -ResourceGroupname $defaultResourceGroup
 
-Get-AzureRmAppServicePlan -Name ContosoAppServicePlan
+Get-AzureRmAppServicePlan -Name itedgeserviceplan2
 
-Set-AzureRmAppServicePlan -Name ContosoAppServicePlan -ResourceGroupName ContosoAzureResourceGroup -Tier Standard -WorkerSize Medium -NumberofWorkers 9
+Set-AzureRmAppServicePlan -Name itedgeserviceplan2 -ResourceGroupName $defaultResourceGroup -Tier Standard -WorkerSize Medium -NumberofWorkers 9
 
-Set-AzureRmAppServicePlan -Name ContosoAppServicePlan -ResourceGroupName ContosoAzureResourceGroup -NumberofWorkers 9
+Set-AzureRmAppServicePlan -Name itedgeserviceplan2 -ResourceGroupName $defaultResourceGroup -NumberofWorkers 9
 
-Set-AzureRmAppServicePlan -Name ContosoAppServicePlan -ResourceGroupName ContosoAzureResourceGroup -Tier Standard
+Set-AzureRmAppServicePlan -Name itedgeserviceplan2 -ResourceGroupName $defaultResourceGroup -Tier Standard
 
-Remove-AzureRmAppServicePlan -Name ContosoAppServicePlan -ResourceGroupName ContosoAzureResourceGroup
+Remove-AzureRmAppServicePlan -Name itedgeserviceplan2 -ResourceGroupName $defaultResourceGroup
 
 #endregion
 
 #region Create a Web App
 
-New-AzureRmWebApp -Name ContosoWebApp -AppServicePlan ContosoAppServicePlan -ResourceGroupName ContosoAzureResourceGroup -Location "South Central US"
+New-AzureRmWebApp -Name ITEdgeWebApp100 -AppServicePlan itedgeserviceplan2 -ResourceGroupName $defaultResourceGroup -Location "South Central US"
 
-New-AzureRmWebApp -Name ContosoWebApp -AppServicePlan ContosoAppServicePlan -ResourceGroupName ContosoAzureResourceGroup -Location "South Central US"  -ASEName ContosoASEName -ASEResourceGroupName ContosoASEResourceGroupName
+New-AzureRmWebApp -Name ITEdgeWebApp100 -AppServicePlan itedgeserviceplan2 -ResourceGroupName $defaultResourceGroup -Location "South Central US"  -ASEName ContosoASEName -ASEResourceGroupName ContosoASEResourceGroupName
 
-Remove-AzureRmWebApp -Name ContosoWebApp -ResourceGroupName ContosoAzureResourceGroup
+Remove-AzureRmWebApp -Name ITEdgeWebApp100 -ResourceGroupName $defaultResourceGroup
 
 Get-AzureRmWebApp
 
-Get-AzureRmWebApp -ResourceGroupname ContosoAzureResourceGroup
+Get-AzureRmWebApp -ResourceGroupname $defaultResourceGroup
 
 
 
@@ -82,28 +82,31 @@ Get-AzureRmWebApp -ResourceGroupname ContosoAzureResourceGroup
 #region Modify Web App Settings
 
 $connectionstrings = @{ ContosoConn1 = @{ Type = “MySql”; Value = “MySqlConn”}; ContosoConn2 = @{ Type = “SQLAzure”; Value = “SQLAzureConn”} }
-Set-AzureRmWebApp -Name ContosoWebApp -ResourceGroupName ContosoAzureResourceGroup -ConnectionStrings $connectionstrings
+Set-AzureRmWebApp -Name ITEdgeWebApp100 -ResourceGroupName $defaultResourceGroup -ConnectionStrings $connectionstrings
 
 $appsettings = @{appsetting1 = "appsetting1value"; appsetting2 = "appsetting2value"}
-Set-AzureRmWebApp -Name ContosoWebApp -ResourceGroupName ContosoAzureResourceGroup -AppSettings $appsettings
+Set-AzureRmWebApp -Name ITEdgeWebApp100 -ResourceGroupName $defaultResourceGroup -AppSettings $appsettings
 
-Set-AzureRmWebApp -Name ContosoWebApp -ResourceGroupName ContosoAzureResourceGroup -Use32BitWorkerProcess $False
+Set-AzureRmWebApp -Name ITEdgeWebApp100 -ResourceGroupName $defaultResourceGroup -Use32BitWorkerProcess $False
 
 #endregion
 
 #region Web App Run States
 
-Restart-AzureRmWebapp -Name ContosoWebApp -ResourceGroupName ContosoAzureResourceGroup
+Restart-AzureRmWebapp -Name ITEdgeWebApp100 -ResourceGroupName $defaultResourceGroup
 
-Stop-AzureRmWebapp -Name ContosoWebApp -ResourceGroupName ContosoAzureResourceGroup
+Stop-AzureRmWebapp -Name ITEdgeWebApp100 -ResourceGroupName $defaultResourceGroup
 
-Start-AzureRmWebapp -Name ContosoWebApp -ResourceGroupName ContosoAzureResourceGroup
+Start-AzureRmWebapp -Name ITEdgeWebApp100 -ResourceGroupName $defaultResourceGroup
 
-Get-AzureRmWebAppPublishingProfile -Name ContosoWebApp -ResourceGroupName ContosoAzureResourceGroup -OutputFile .\publishingprofile.txt
+Get-AzureRmWebAppPublishingProfile -Name ITEdgeWebApp100 -ResourceGroupName $defaultResourceGroup -OutputFile .\publishingprofile.txt
 
 #endregion
 
 #region ARM Template Deployment
+
+
+
 
 
 #endregion
