@@ -105,20 +105,15 @@ Get-AzureRmWebAppPublishingProfile -Name ITEdgeWebApp100 -ResourceGroupName $def
 
 #region ARM Template Deployment
 
+ise ./azuredeploy.json
 
+ise ./azuredeploy.parameters.json
 
-
+New-AzureRmResourceGroupDeployment -Name 'Webapp2GitHub' -ResourceGroupName $defaultResourceGroup `
+-TemplateUri '' `
+-TemplateFile '' `
+-TemplateParameterFile `
+-TemplateParameterUri '' `
+-Mode Complete/Incremental
 
 #endregion
-
-
-
-
-
-
-
-
-
-
-
-
