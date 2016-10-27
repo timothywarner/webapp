@@ -27,6 +27,8 @@ Start-Process https://github.com/Azure/azure-xplat-cli
 
 azure
 
+azure telemetry --disable
+
 azure help login
 
 azure login

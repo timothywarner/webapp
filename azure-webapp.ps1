@@ -8,6 +8,24 @@ break
  
 # Press CTRL+M to expand/collapse regions
 
+#region Housekeeping
+
+$PSVersionTable
+
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Force -Scope Process
+
+Update-Help -Force -ErrorAction SilentlyContinue
+
+#endregion
+
+#region Obtain the Azure modules
+
+Find-Module -Name AzureRM, Azure
+
+Install-Module -Name AzureRM, Azure -MaximumVersion -Verbose -WhatIf
+
+#endregion
+
 #region Connect to Azure
 
 $defaultSubscription = '150dollar'
@@ -19,16 +37,8 @@ Select-AzureRmSubscription -SubscriptionName $defaultSubscription
 Set-AzureRmCurrentStorageAccount -ResourceGroupName $defaultResourceGroup -StorageAccountName $defaultStorageAccount 
 Set-AzureRmContext -SubscriptionName $defaultSubscription
 
-#endregion
-
-#region Housekeeping
-
-$PSVersionTable
-
-Set-ExecutionPolicy -ExecutionPolicy Bypass -Force -Scope Process
-
-Update-Help -Force -ErrorAction SilentlyContinue
-
+Save-AzureRmProfile -Path 'C:\Users\Tim\Desktop\profile.json'
+Select-AzureRmProfile -Path ./profile.json
 #endregion
 
 #region Discovery
@@ -47,7 +57,7 @@ Get-Help -Name New-AzureWebsite -ShowWindow
 
 New-AzureRmAppServicePlan -Name itedgeserviceplan2 -Location "South Central US" -ResourceGroupName $defaultResourceGroup -Tier Premium -WorkerSize Large -NumberofWorkers 10
 
-New-AzureRmAppServicePlan -Name itedgeserviceplan2 -Location "South Central US" -ResourceGroupName $defaultResourceGroup -AseName constosoASE -AseResourceGroupName contosoASERG -Tier Premium -WorkerSize Large -NumberofWorkers 10
+New-AzureRmAppServicePlan -Name itedgeserviceplan2 -Location "South Central US" -ResourceGroupName $defaultResourceGroup -AseName constosoASE -AseResourceGroupName ITEdgeASERG -Tier Premium -WorkerSize Large -NumberofWorkers 10
 
 Get-AzureRmAppServicePlan -ResourceGroupname $defaultResourceGroup
 
@@ -67,7 +77,7 @@ Remove-AzureRmAppServicePlan -Name itedgeserviceplan2 -ResourceGroupName $defaul
 
 New-AzureRmWebApp -Name ITEdgeWebApp100 -AppServicePlan itedgeserviceplan2 -ResourceGroupName $defaultResourceGroup -Location "South Central US"
 
-New-AzureRmWebApp -Name ITEdgeWebApp100 -AppServicePlan itedgeserviceplan2 -ResourceGroupName $defaultResourceGroup -Location "South Central US"  -ASEName ContosoASEName -ASEResourceGroupName ContosoASEResourceGroupName
+New-AzureRmWebApp -Name ITEdgeWebApp100 -AppServicePlan itedgeserviceplan2 -ResourceGroupName $defaultResourceGroup -Location "South Central US"  -ASEName ITEdgeASEName -ASEResourceGroupName ITEdgeASEResourceGroupName
 
 Remove-AzureRmWebApp -Name ITEdgeWebApp100 -ResourceGroupName $defaultResourceGroup
 
@@ -81,7 +91,7 @@ Get-AzureRmWebApp -ResourceGroupname $defaultResourceGroup
 
 #region Modify Web App Settings
 
-$connectionstrings = @{ ContosoConn1 = @{ Type = “MySql”; Value = “MySqlConn”}; ContosoConn2 = @{ Type = “SQLAzure”; Value = “SQLAzureConn”} }
+$connectionstrings = @{ ITEdgeConn1 = @{ Type = 'MySql'; Value = 'MySqlConn'}; ITEdgeConn2 = @{ Type = 'SQLAzure'; Value = 'SQLAzureConn'} }
 Set-AzureRmWebApp -Name ITEdgeWebApp100 -ResourceGroupName $defaultResourceGroup -ConnectionStrings $connectionstrings
 
 $appsettings = @{appsetting1 = "appsetting1value"; appsetting2 = "appsetting2value"}
@@ -105,15 +115,17 @@ Get-AzureRmWebAppPublishingProfile -Name ITEdgeWebApp100 -ResourceGroupName $def
 
 #region ARM Template Deployment
 
+Set-Location -Path 'C:\Users\Tim\Desktop\webapp\simplewebapp'
+
 ise ./azuredeploy.json
 
 ise ./azuredeploy.parameters.json
 
 New-AzureRmResourceGroupDeployment -Name 'Webapp2GitHub' -ResourceGroupName $defaultResourceGroup `
--TemplateUri '' `
--TemplateFile '' `
--TemplateParameterFile `
--TemplateParameterUri '' `
--Mode Complete/Incremental
+# -TemplateUri '' `
+-TemplateFile '.\azuredeploy.json' `
+-TemplateParameterFile '.\azuredeploy.parameters.json' `
+# -TemplateParameterUri '' `
+-Mode Complete
 
 #endregion
