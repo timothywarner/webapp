@@ -1,2 +1,2 @@
-# Manage Your Azure Web Apps with Windows PowerShell
-IT Edge Intersection 2016 (itedgeintersection.com)
+# 2017 PowerShell + DevOps Summit - Tim Warner's Sessions
+Reach me via Twitter @TechTrainerTim
