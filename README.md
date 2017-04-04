@@ -1,2 +1,2 @@
 # 2017 PowerShell + DevOps Summit - Tim Warner's Sessions
-Reach me via Twitter @TechTrainerTim
+Reach me via Twitter: [@TechTrainerTim](https://twitter.com/techtrainertim)
