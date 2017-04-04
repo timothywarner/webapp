@@ -1,6 +1,6 @@
 break
 # #############################################################################
-# Azure CLI
+# Azure CLI v2.0
 # AUTHOR:  Tim Warner
 # EMAIL: timothy-warner@pluralsight.com
 # TWITTER: @TechTrainerTim
@@ -8,84 +8,42 @@ break
  
 # Press CTRL+M to expand/collapse regions
 
-#region Connect to Azure
+# Install Azure CLI v2.0
 
-$defaultSubscription = '150dollar'
-$defaultStorageAccount = 'itedgestorage'
-$defaultResourceGroup = 'ITEdgeRG'
+# Download and install the binaries 
+Start-Process https://www.python.org/downloads/
 
-Login-AzureRmAccount -SubscriptionName $defaultSubscription
-Select-AzureRmSubscription -SubscriptionName $defaultSubscription
-Set-AzureRmCurrentStorageAccount -ResourceGroupName $defaultResourceGroup -StorageAccountName $defaultStorageAccount 
-Set-AzureRmContext -SubscriptionName $defaultSubscription
+# Use Python Package Manager to install the CLI
+pip install --user azure-cli
 
-#endregion
+# Make sure to update your PATH so you can launch az.bat
+Test-Path C:\Users\Tim\AppData\Roaming\Python\Python36\Scripts
+Test-Path C:\Users\Tim\AppData\Roaming\Python\Scripts
 
-#region Navigating the Azure CLI
+# Log in
+az
+az login
 
-Start-Process https://github.com/Azure/azure-xplat-cli
+# Set your context
+az account -h
+az account set -h
+az account set --subscription 'tim-2017'
 
-azure
+az account list -h
 
-azure telemetry --disable
+az account list -o table
 
-azure help login
+# App Service
+az appservice -h
 
-azure login
+az appservice web -h
 
-Start-Process https://aka.ms/devicelogin
+az appservice web list -h 
 
-azure config mode arm
+# You can run JMESPath queries; this is a query language for JSON (jmespath.org)
 
-azure account list
+az appservice web list --query "[?state=='Running']"
 
-azure account show '150dollar'
+az appservice web list --query "[].{ hostName: defaultHostName, state: state }"
 
-azure account set '150dollar'
-
-azure help webapp
-
-azure webapp list 'ITEdgeRG'
-
-azure location list
-
-azure help webapp create
-
-azure webapp create -v -g 'ITEdgeRG' -n 'itedgetest01' -l 'westus' -p 'itedgeSP'
-
-azure webapp list 'ITEdgeRG'
-
-azure webapp show -n 'itedgetest01' -g 'ITEdgeRG'
-
-azure webapp stop/start/restart/delete -n 'itedgetest01' -g 'ITEdgeRG'
-
-#endregion
-
-#region App Settings
-
-azure config mode asm
-
-azure
-
-azure help site
-
-azure site list
-
-azure site appsetting list 'itedgetest01'
-
-#endregion
-
-#region ARM template deployment
-
-Start-Process https://azure.microsoft.com/en-us/documentation/templates/201-web-app-github-deploy/
-
-Start-Process https://github.com/Azure/azure-quickstart-templates/tree/master/201-web-app-github-deploy
-
-azure group deployment create --template-uri https://github.com/timothywarner/webapp/simplewebapp/azuredeploy.json -g 'ITEdgeRG' -n 'itedgeCLIdeploy01' 
-
-#endregion
-
-
-
-
-
+az vm list --output table --query "[?contains(resourceGroup,'MY')]" 

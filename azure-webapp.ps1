@@ -8,44 +8,32 @@ break
  
 # Press CTRL+M to expand/collapse regions
 
-#region Housekeeping
+#region Obtain the Azure module
 
-$PSVersionTable
+Find-Module -Name AzureRM.Websites -AllVersions
 
-Set-ExecutionPolicy -ExecutionPolicy Bypass -Force -Scope Process
+Install-Module -Name AzureRM -MaximumVersion -Verbose
 
-Update-Help -Force -ErrorAction SilentlyContinue
-
-#endregion
-
-#region Obtain the Azure modules
-
-Find-Module -Name AzureRM, Azure
-
-Install-Module -Name AzureRM, Azure -MaximumVersion -Verbose -WhatIf
+Update-Help -Force
 
 #endregion
 
 #region Connect to Azure
 
-$defaultSubscription = '150dollar'
-$defaultStorageAccount = 'itedgestorage'
-$defaultResourceGroup = 'ITEdgeRG'
+Set-Location -Path 'C:\Users\Tim\Dropbox\path-to-repo\'
+Login-AzureRmAccount
+Get-AzureRmContext   # Get-AzureRmSubscription
+Set-AzureRmContext -SubscriptionName ''
 
-Login-AzureRmAccount -SubscriptionName $defaultSubscription
-Select-AzureRmSubscription -SubscriptionName $defaultSubscription
-Set-AzureRmCurrentStorageAccount -ResourceGroupName $defaultResourceGroup -StorageAccountName $defaultStorageAccount 
-Set-AzureRmContext -SubscriptionName $defaultSubscription
-
-Save-AzureRmProfile -Path 'C:\Users\Tim\Desktop\profile.json'
-Select-AzureRmProfile -Path ./profile.json
+Save-AzureRmProfile -Path '.\profile.json'
+Select-AzureRmProfile -Path '.\profile.json'
 #endregion
 
 #region Discovery
 
 Get-Command -Module AzureRM.Websites | Select-Object -Property Name | Format-Wide -Column 2
 
-Get-Command -Module Azure | Where-Object { $_.Name -like "*website*"} | Select-Object -Property Name | Format-Wide -Column 2
+Get-Help New-AzureRmWebApp -ShowWindow
 
 Get-Help -Name New-AzureRmWebApp -ShowWindow
 
@@ -55,73 +43,73 @@ Get-Help -Name New-AzureWebsite -ShowWindow
 
 #region App Service Plans
 
-New-AzureRmAppServicePlan -Name itedgeserviceplan2 -Location "South Central US" -ResourceGroupName $defaultResourceGroup -Tier Premium -WorkerSize Large -NumberofWorkers 10
+Get-AzureRmAppServicePlan | Get-Member
 
-New-AzureRmAppServicePlan -Name itedgeserviceplan2 -Location "South Central US" -ResourceGroupName $defaultResourceGroup -AseName constosoASE -AseResourceGroupName ITEdgeASERG -Tier Premium -WorkerSize Large -NumberofWorkers 10
+New-AzureRmResourceGroup -Name 'pssummit2017' -Location 'WestUS' 
 
-Get-AzureRmAppServicePlan -ResourceGroupname $defaultResourceGroup
+$rg = Get-AzureRmResourceGroup -Name 'pssummit2017'
+$asp = 'pssummitplan'
 
-Get-AzureRmAppServicePlan -Name itedgeserviceplan2
+New-AzureRmAppServicePlan -Name $asp -Location 'WestUS' -ResourceGroupName 'pssummit2017' -Tier Free -Verbose
 
-Set-AzureRmAppServicePlan -Name itedgeserviceplan2 -ResourceGroupName $defaultResourceGroup -Tier Standard -WorkerSize Medium -NumberofWorkers 9
+Get-AzureRmAppServicePlan -Name $asp | Format-List *
 
-Set-AzureRmAppServicePlan -Name itedgeserviceplan2 -ResourceGroupName $defaultResourceGroup -NumberofWorkers 9
+Set-AzureRmAppServicePlan -Name $asp -ResourceGroupName 'pssummit2017' -Tier Standard
 
-Set-AzureRmAppServicePlan -Name itedgeserviceplan2 -ResourceGroupName $defaultResourceGroup -Tier Standard
-
-Remove-AzureRmAppServicePlan -Name itedgeserviceplan2 -ResourceGroupName $defaultResourceGroup
+Remove-AzureRmAppServicePlan -Name $asp -ResourceGroupName 'pssummit2017'
 
 #endregion
 
 #region Create a Web App
 
-New-AzureRmWebApp -Name ITEdgeWebApp100 -AppServicePlan itedgeserviceplan2 -ResourceGroupName $defaultResourceGroup -Location "South Central US"
+$appName = 'pssummitwebapp101'
 
-New-AzureRmWebApp -Name ITEdgeWebApp100 -AppServicePlan itedgeserviceplan2 -ResourceGroupName $defaultResourceGroup -Location "South Central US"  -ASEName ITEdgeASEName -ASEResourceGroupName ITEdgeASEResourceGroupName
+New-AzureRmWebApp -Name $appName -AppServicePlan $asp `
+-ResourceGroupName 'pssummit2017' -Location 'WestUS'
 
-Remove-AzureRmWebApp -Name ITEdgeWebApp100 -ResourceGroupName $defaultResourceGroup
+Remove-AzureRmWebApp -Name $appName -ResourceGroupName 'pssummit2017'
 
-Get-AzureRmWebApp
-
-Get-AzureRmWebApp -ResourceGroupname $defaultResourceGroup
-
-
+Get-AzureRmWebApp -ResourceGroupname 'pssummit2017'
 
 #endregion
 
 #region Modify Web App Settings
 
 $connectionstrings = @{ ITEdgeConn1 = @{ Type = 'MySql'; Value = 'MySqlConn'}; ITEdgeConn2 = @{ Type = 'SQLAzure'; Value = 'SQLAzureConn'} }
-Set-AzureRmWebApp -Name ITEdgeWebApp100 -ResourceGroupName $defaultResourceGroup -ConnectionStrings $connectionstrings
+Set-AzureRmWebApp -Name $appName -ResourceGroupName 'pssummit2017' -ConnectionStrings $connectionstrings
 
 $appsettings = @{appsetting1 = "appsetting1value"; appsetting2 = "appsetting2value"}
-Set-AzureRmWebApp -Name ITEdgeWebApp100 -ResourceGroupName $defaultResourceGroup -AppSettings $appsettings
 
-Set-AzureRmWebApp -Name ITEdgeWebApp100 -ResourceGroupName $defaultResourceGroup -Use32BitWorkerProcess $False
+Set-AzureRmWebApp -Name $appName -ResourceGroupName 'pssummit2017' -AppSettings $appsettings
+
+Set-AzureRmWebApp -Name $appName -ResourceGroupName 'pssummit2017' -Use32BitWorkerProcess $False
 
 #endregion
 
 #region Web App Run States
 
-Restart-AzureRmWebapp -Name ITEdgeWebApp100 -ResourceGroupName $defaultResourceGroup
+Restart-AzureRmWebapp -Name $appName -ResourceGroupName 'pssummit2017'
 
-Stop-AzureRmWebapp -Name ITEdgeWebApp100 -ResourceGroupName $defaultResourceGroup
+Stop-AzureRmWebapp -Name $appName -ResourceGroupName 'pssummit2017'
 
-Start-AzureRmWebapp -Name ITEdgeWebApp100 -ResourceGroupName $defaultResourceGroup
+Start-AzureRmWebapp -Name $appName -ResourceGroupName 'pssummit2017'
 
-Get-AzureRmWebAppPublishingProfile -Name ITEdgeWebApp100 -ResourceGroupName $defaultResourceGroup -OutputFile .\publishingprofile.txt
+Get-AzureRmWebAppPublishingProfile -Name $appName -ResourceGroupName 'pssummit2017' -OutputFile 'c:\profile.xml'
+
+ise 'C:\profile.xml'
 
 #endregion
 
 #region ARM Template Deployment
 
-Set-Location -Path 'C:\Users\Tim\Desktop\webapp\simplewebapp'
+Set-Location -Path 'D:\Dropbox (Personal)\PowerShell Summit 2017\tues-Azure-Web-Apps\webapp\simplewebapp'
 
+# show in VS 2017
 ise ./azuredeploy.json
 
 ise ./azuredeploy.parameters.json
 
-New-AzureRmResourceGroupDeployment -Name 'Webapp2GitHub' -ResourceGroupName $defaultResourceGroup `
+New-AzureRmResourceGroupDeployment -Name 'Webapp2GitHub' -ResourceGroupName 'pssummit2017' `
 # -TemplateUri '' `
 -TemplateFile '.\azuredeploy.json' `
 -TemplateParameterFile '.\azuredeploy.parameters.json' `
