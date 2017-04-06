@@ -3,22 +3,22 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "databaseAccountName": {
-      "value": "GEN-UNIQUE"
+      "value": "pss2017dbacct1"
     },
     "sqlServerAdminLogin": {
-      "value": "adminUserName"
+      "value": "tim"
     },
     "sqlServerAdminLoginPassword": {
-      "value": "GEN-PASSWORD"
+      "value": "P@$$w0rdP@$$w0rd"
     },
     "sqlDatabaseName": {
-      "value": "GEN-UNIQUE"
+      "value": "pss2017sqldb2"
     },
     "webAppName": {
-      "value": "GEN-UNIQUE"
+      "value": "pss17webapp2"
     },
     "azureSearchname": {
-      "value": "GEN-UNIQUE"
+      "value": "pss17azsearch2"
     }
   }
 }
