@@ -9,50 +9,40 @@ break
 # Press CTRL+M to expand/collapse regions
 
 #region Obtain the Azure module
-
 Find-Module -Name AzureRM.Websites -AllVersions
 
 Install-Module -Name AzureRM -MaximumVersion -Verbose
 
 Update-Help -Force
-
 #endregion
 
 #region Connect to Azure
-
-Set-Location -Path 'C:\Users\Tim\Dropbox\path-to-repo\'
+Set-Location -Path 'C:\Users\Tim\Dropbox\PowerShell Summit 2017'
 Login-AzureRmAccount
 Get-AzureRmContext   # Get-AzureRmSubscription
 Set-AzureRmContext -SubscriptionName ''
-
 Save-AzureRmProfile -Path '.\profile.json'
 Select-AzureRmProfile -Path '.\profile.json'
 #endregion
 
 #region Discovery
-
-Get-Command -Module AzureRM.Websites | Select-Object -Property Name | Format-Wide -Column 2
-
-Get-Help New-AzureRmWebApp -ShowWindow
-
-Get-Help -Name New-AzureRmWebApp -ShowWindow
-
-Get-Help -Name New-AzureWebsite -ShowWindow
-
+Get-Command -Module AzureRM.Websites | Select-Object -Property Name | Sort-Object -Property Name | Format-Wide -Column 2
+ 
+Get-Help -Name New-AzureRmAppServicePlan -ShowWindow
+Get-Help -Name New-AzureRmAppServicePlan -Online
+Start-Process https://docs.microsoft.com/en-us/powershell/module/azurerm.websites/new-azurermappserviceplan?view=azurermps-2.2.0
 #endregion
 
 #region App Service Plans
-
-Get-AzureRmAppServicePlan | Get-Member
-
-New-AzureRmResourceGroup -Name 'pssummit2017' -Location 'WestUS' 
-
+New-AzureRmResourceGroup -Name 'pssummit2017' -Location 'West US' 
 $rg = Get-AzureRmResourceGroup -Name 'pssummit2017'
 $asp = 'pssummitplan'
 
-New-AzureRmAppServicePlan -Name $asp -Location 'WestUS' -ResourceGroupName 'pssummit2017' -Tier Free -Verbose
+New-AzureRmAppServicePlan -Name $asp -Location 'West US' -ResourceGroupName 'pssummit2017' -Tier Free -Verbose
 
 Get-AzureRmAppServicePlan -Name $asp | Format-List *
+
+Get-AzureRmAppServicePlan | Get-Member
 
 Set-AzureRmAppServicePlan -Name $asp -ResourceGroupName 'pssummit2017' -Tier Standard
 

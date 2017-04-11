@@ -23,9 +23,11 @@ Test-Path C:\Users\Tim\AppData\Roaming\Python\Scripts
 # Log in
 az
 az login
-
+start-process https://aka.ms/devicelogin
 # Set your context
+az
 az account -h
+az account list --all -o table
 az account set -h
 az account set --subscription 'tim-2017'
 
@@ -40,7 +42,7 @@ az appservice web -h
 
 az appservice web list -h 
 
-# You can run JMESPath queries; this is a query language for JSON (jmespath.org)
+# You can run JMESPath ("jamespath") queries; this is a query language for JSON (jmespath.org)
 
 az appservice web list --query "[?state=='Running']"
 
